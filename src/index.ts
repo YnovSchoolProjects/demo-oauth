@@ -2,6 +2,8 @@ import express, { Application } from 'express';
 import routes from './routes/index';
 import passport from 'passport';
 import connect from './connect';
+import morgan from 'morgan';
+import session from 'express-session';
 
 // Boot express
 const app: Application = express();
@@ -16,8 +18,10 @@ passport.deserializeUser(function(user, done): void {
 });
 
 // Application config
+app.use(session({ secret: 'oauth-demo-session' }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 routes(app);
 
 const db = 'mongodb://root:example@localhost:27017/oauth?authSource=admin';

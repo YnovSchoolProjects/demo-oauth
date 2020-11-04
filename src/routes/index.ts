@@ -3,6 +3,7 @@ import PassportMiddleware from '../middleware/passport';
 
 export default (app: Application): void => {
   app.get('/hello', (req: Request, res: Response): void => {
+    console.log(req.user);
     if (!req.user) {
       res.redirect('/');
     }
