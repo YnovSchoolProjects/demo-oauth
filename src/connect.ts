@@ -6,10 +6,10 @@ export default (db: MongoDsn): void => {
   const connect = (): void => {
     mongoose
       .connect(db, { useNewUrlParser: true })
-      .then(() => {
+      .then((): void => {
         return console.info(`Successfully connected to ${db}`);
       })
-      .catch(error => {
+      .catch((error): void => {
         console.error('Error connecting to database: ', error);
         return process.exit(1);
       });
