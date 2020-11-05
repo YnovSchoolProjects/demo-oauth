@@ -31,7 +31,7 @@ passport.use(
     async function(accessToken: string, refreshToken: string, profile: GithubUser, done: Function): Promise<void> {
       try {
         const user = await UserSchema.findOne({ githubId: profile.id });
-        done(null, user);
+        done(null, { accessToken, user });
       } catch (e) {
         const emails = profile.emails.map(({ value }): string => value);
         const user = await UserSchema.create({
@@ -40,7 +40,7 @@ passport.use(
           displayName: profile.displayName,
           username: profile.username,
         });
-        done(null, user);
+        done(null, { accessToken, user });
       }
     },
   ),

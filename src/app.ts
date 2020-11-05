@@ -3,7 +3,7 @@ import { Application } from 'express';
 import session from 'express-session';
 import passport from 'passport';
 import morgan from 'morgan';
-import { Controller } from './routes';
+import { Controller } from './controllers';
 
 class App {
   public app: Application;
@@ -15,8 +15,8 @@ class App {
 
     this.bootstrapMiddlewares();
     this.bootstrapRoutes(controllers);
-    // this.assets();
-    // this.template();
+    this.assets();
+    this.template();
   }
 
   private bootstrapMiddlewares(): void {

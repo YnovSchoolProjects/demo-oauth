@@ -1,6 +1,6 @@
 import App from './app';
-import GithubOAuthController from './routes/github-oauth-controller';
-import HomeController from './routes/home-controller';
+import GithubOAuthController from './controllers/github-oauth-controller';
+import HomeController from './controllers/home-controller';
 import connect from './connect';
 
 const controllers = [new GithubOAuthController(), new HomeController()];
