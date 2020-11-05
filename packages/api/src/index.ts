@@ -2,11 +2,13 @@ import App from './app';
 import GithubOAuthController from './controllers/github-oauth-controller';
 import HomeController from './controllers/home-controller';
 import connect from './connect';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const controllers = [new GithubOAuthController(), new HomeController()];
-const app = new App({ port: 8080, controllers });
+const app = new App({ port: parseInt(`${process.env.APP_PORT}`, 10), controllers });
 
-const db = 'mongodb://root:example@localhost:27017/oauth?authSource=admin';
-connect(db);
+connect(process.env.MONGO_DSN as string);
 
 app.listen();

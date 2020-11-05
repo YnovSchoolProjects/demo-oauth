@@ -1,6 +1,6 @@
 import { Application, Request, Response } from 'express';
 import PassportMiddleware from '../middleware/passport';
-import { Controller } from './index';
+import { Controller } from '@/types';
 
 class GithubOAuthController implements Controller {
   public path = '/github/auth';

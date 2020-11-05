@@ -1,6 +1,22 @@
 version: "3.8"
 
+# =================================
+# /!\ Caution, for dev purpose only
+# =================================
 services:
+  api:
+    container_name: api
+    image: node:14-alpine
+    restart: always
+    depends_on:
+      - mongodb
+    command: yarn dev
+    working_dir: /app
+    volumes:
+    - ./packages/api:/app
+    ports:
+    - 8080:8080
+
   mongodb:
     container_name: mongodb
     image: mongo:4.0.20-xenial

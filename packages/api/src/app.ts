@@ -1,9 +1,7 @@
-import express from 'express';
-import { Application } from 'express';
-import session from 'express-session';
+import express, { Application } from 'express';
 import passport from 'passport';
 import morgan from 'morgan';
-import { Controller } from './controllers';
+import { Controller } from './types';
 
 class App {
   public app: Application;
@@ -15,14 +13,10 @@ class App {
 
     this.bootstrapMiddlewares();
     this.bootstrapRoutes(controllers);
-    this.assets();
-    this.template();
   }
 
   private bootstrapMiddlewares(): void {
-    this.app.use(session({ secret: 'oauth-demo-session' }));
     this.app.use(passport.initialize());
-    this.app.use(passport.session());
     this.app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
   }
 
@@ -30,15 +24,6 @@ class App {
     controllers.forEach((controller): void => {
       controller.initializeRoutes(this.app);
     });
-  }
-
-  private assets(): void {
-    this.app.use(express.static('public'));
-    this.app.use(express.static('views'));
-  }
-
-  private template(): void {
-    this.app.set('view engine', 'pug');
   }
 
   public listen(): void {

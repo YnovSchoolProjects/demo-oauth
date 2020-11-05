@@ -1,7 +1,6 @@
 import { Application, Request, Response } from 'express';
-import { Controller } from './index';
+import { Controller, GithubKeysResource, MinifiedGithubKeysResource } from '@/types';
 import axios from 'axios';
-import { GithubKeysResource, MinifiedGithubKeysResource } from '../resources/github-keys-resource';
 
 class HomeController implements Controller {
   public path = '/';
@@ -12,7 +11,6 @@ class HomeController implements Controller {
   }
 
   private handleHelloRoute = async (req: Request, res: Response): Promise<void> => {
-    console.log(req.user);
     if (!req.user) {
       res.redirect(this.path);
       return;

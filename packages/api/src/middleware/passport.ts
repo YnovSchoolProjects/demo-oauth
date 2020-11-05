@@ -1,47 +1,35 @@
 import passport from 'passport';
 import { Strategy as GithubStrategy } from 'passport-github2';
-import UserSchema from '../models/user';
+import { GithubUser } from '@/types';
+import { AUTHENTICATION_SERVICE, container, USER_REPOSITORY } from '@/services/container';
+import AuthenticationService from '@/services/authentication';
+import UserRepository from '@/models/repository/user';
+import { OAuthProviderTypes } from '@/types/enum';
 
-interface GithubUser {
-  id: string;
-  emails: [
-    {
-      value: string;
-    },
-  ];
-  displayName: string;
-  username: string;
-}
-
-passport.serializeUser(function(user, done): void {
+passport.serializeUser((user, done): void => {
   done(null, user);
 });
 
-passport.deserializeUser(function(user, done): void {
+passport.deserializeUser((user, done): void => {
   done(null, user);
 });
 
 passport.use(
   new GithubStrategy(
     {
-      clientID: 'e72b5e154db6e4fef668',
-      clientSecret: '3fa6dbd3ca7e72c9e17987a968cd2f6beb28e4d0',
-      callbackURL: 'http://localhost:8080/github/auth/callback',
+      clientID: process.env.GITHUB_CLIENT_ID as string,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+      callbackURL: process.env.GITHUB_CALLBACK_URL as string,
     },
-    async function(accessToken: string, refreshToken: string, profile: GithubUser, done: Function): Promise<void> {
-      try {
-        const user = await UserSchema.findOne({ githubId: profile.id });
-        done(null, { accessToken, user });
-      } catch (e) {
-        const emails = profile.emails.map(({ value }): string => value);
-        const user = await UserSchema.create({
-          githubId: profile.id,
-          emails: emails,
-          displayName: profile.displayName,
-          username: profile.username,
-        });
-        done(null, { accessToken, user });
-      }
+    async (accessToken: string, refreshToken: string, profile: GithubUser, done: Function): Promise<void> => {
+      const userRepository = container.get<UserRepository>(USER_REPOSITORY);
+      const authenticationService = container.get<AuthenticationService>(AUTHENTICATION_SERVICE);
+
+      const user = await userRepository.findOrCreate(profile);
+      await userRepository.addProvider(user, { accessToken, refreshToken, provider: OAuthProviderTypes.GITHUB });
+      const token = authenticationService.generateJWT(user);
+
+      done(null, { token, user });
     },
   ),
 );

@@ -1,10 +1,12 @@
 import mongoose, { Schema, Document } from 'mongoose';
+import { OAuth } from '@/types/resources';
 
 export interface User extends Document {
   emails: string[];
   githubId: string;
   displayName: string;
   username: string;
+  oauthProviders: OAuth[];
 }
 
 const UserSchema: Schema = new Schema({
@@ -12,6 +14,7 @@ const UserSchema: Schema = new Schema({
   emails: { type: Array, required: true },
   displayName: { type: String, required: true },
   username: { type: String, required: true },
+  oauthProviders: { type: Array, required: false },
 });
 
 // Export the model and return your IUser interface

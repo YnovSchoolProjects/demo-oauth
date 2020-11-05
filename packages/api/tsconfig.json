@@ -5,13 +5,15 @@
     "target": "es6",
     "noImplicitAny": true,
     "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "sourceMap": true,
     "outDir": "dist",
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
-      "*": [
-        "node_modules/*"
-      ]
+      "*": ["node_modules/*"],
+      "@config/*": ["config/*"],
+      "@/*": ["src/*"]
     },
     "typeRoots": [
       "node_modules/@types",
