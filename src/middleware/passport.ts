@@ -13,6 +13,14 @@ interface GithubUser {
   username: string;
 }
 
+passport.serializeUser(function(user, done): void {
+  done(null, user);
+});
+
+passport.deserializeUser(function(user, done): void {
+  done(null, user);
+});
+
 passport.use(
   new GithubStrategy(
     {
